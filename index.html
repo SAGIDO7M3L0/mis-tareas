@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mis Tareas</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-primary: #ffffff; --bg-secondary: #f5f5f0; --bg-info: #e6f1fb; --bg-success: #eaf3de;
+    --text-primary: #1a1a18; --text-secondary: #5f5e5a; --text-tertiary: #888780;
+    --text-info: #185fa5; --text-danger: #a32d2d;
+    --border-light: rgba(0,0,0,0.13); --border-mid: rgba(0,0,0,0.28);
+    --border-info: #378add; --border-success: #639922;
+    --radius-md: 8px; --radius-lg: 12px; --font: system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-primary: #1e1e1c; --bg-secondary: #2a2a28; --bg-info: #042c53; --bg-success: #173404;
+      --text-primary: #f0ede8; --text-secondary: #b4b2a9; --text-tertiary: #888780;
+      --text-info: #b5d4f4; --text-danger: #f7c1c1;
+      --border-light: rgba(255,255,255,0.11); --border-mid: rgba(255,255,255,0.24);
+    }
+  }
+  body { font-family: var(--font); background: var(--bg-secondary); color: var(--text-primary); min-height: 100vh; padding: 2rem 1rem; }
+  .wrap { max-width: 700px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; }
+  .card { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .form-grid input[type="text"], .form-grid input[type="date"], .form-grid select {
+    height: 36px; font-size: 13px; padding: 0 10px; border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-mid); background: var(--bg-primary);
+    color: var(--text-primary); width: 100%; font-family: var(--font);
+  }
+  .form-grid input[type="text"] { grid-column: 1 / -1; font-size: 14px; }
+  .form-grid input:focus, .form-grid select:focus { outline: none; border-color: var(--border-info); }
+  .add-btn { grid-column: 1 / -1; height: 36px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-primary); font-size: 14px; cursor: pointer; font-family: var(--font); transition: background 0.12s; }
+  .add-btn:hover { background: var(--bg-secondary); }
+  .add-btn:disabled { opacity: 0.5; cursor: default; }
+  .controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+  .sort-lbl { font-size: 13px; color: var(--text-secondary); margin-right: 2px; }
+  .sort-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); transition: all 0.12s; }
+  .sort-btn.on { background: var(--bg-info); color: var(--text-info); border-color: var(--border-info); font-weight: 500; }
+  .sort-btn:hover:not(.on) { background: var(--bg-secondary); }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .tc { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 11px 14px; display: flex; align-items: center; gap: 11px; transition: border-color 0.12s; }
+  .tc:hover { border-color: var(--border-mid); }
+  .tc.urgent { border-left: 3px solid #E24B4A; }
+  .tc.soon   { border-left: 3px solid #EF9F27; }
+  .tc.done   { opacity: 0.4; }
+  .tc.done .tname { text-decoration: line-through; }
+  .chk { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border-mid); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+  .chk.on { background: var(--bg-success); border-color: var(--border-success); }
+  .chk svg { display: none; }
+  .chk.on svg { display: block; }
+  .tinfo { flex: 1; min-width: 0; }
+  .tname { font-size: 14px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tmeta { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+  .badge { font-size: 11px; padding: 2px 7px; border-radius: 99px; font-weight: 500; }
+  .bt1{background:#EAF3DE;color:#3B6D11}.bt2{background:#FAEEDA;color:#854F0B}.bt3{background:#FCEBEB;color:#A32D2D}
+  .bd1{background:#E1F5EE;color:#0F6E56}.bd2{background:#E6F1FB;color:#185FA5}.bd3{background:#FAEEDA;color:#854F0B}.bd4{background:#FCEBEB;color:#A32D2D}
+  .bi1{background:#F1EFE8;color:#5F5E5A}.bi2{background:#E1F5EE;color:#0F6E56}.bi3{background:#FAEEDA;color:#854F0B}.bi4{background:#FCEBEB;color:#A32D2D}
+  .do{background:#FCEBEB;color:#A32D2D}.dh{background:#FCEBEB;color:#A32D2D}.du{background:#FAEEDA;color:#854F0B}.ds{background:#EAF3DE;color:#3B6D11}.dn{background:#F1EFE8;color:#5F5E5A}.dx{background:#F1EFE8;color:#888780}
+  @media (prefers-color-scheme: dark) {
+    .bt1{background:#173404;color:#C0DD97}.bt2{background:#412402;color:#FAC775}.bt3{background:#501313;color:#F7C1C1}
+    .bd1{background:#04342C;color:#9FE1CB}.bd2{background:#042C53;color:#B5D4F4}.bd3{background:#412402;color:#FAC775}.bd4{background:#501313;color:#F7C1C1}
+    .bi1{background:#2C2C2A;color:#B4B2A9}.bi2{background:#04342C;color:#9FE1CB}.bi3{background:#412402;color:#FAC775}.bi4{background:#501313;color:#F7C1C1}
+    .do{background:#501313;color:#F7C1C1}.dh{background:#501313;color:#F7C1C1}.du{background:#412402;color:#FAC775}.ds{background:#173404;color:#C0DD97}.dn{background:#2C2C2A;color:#B4B2A9}.dx{background:#2C2C2A;color:#888780}
+  }
+  .sblock { display: flex; flex-direction: column; align-items: center; gap: 1px; flex-shrink: 0; min-width: 36px; }
+  .snum { font-size: 18px; font-weight: 500; line-height: 1; }
+  .slbl { font-size: 10px; color: var(--text-tertiary); }
+  .del { font-size: 18px; color: var(--text-tertiary); cursor: pointer; background: none; border: none; padding: 0 2px; flex-shrink: 0; font-family: var(--font); }
+  .del:hover { color: var(--text-danger); }
+  .sec-lbl { font-size: 11px; color: var(--text-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin: 1rem 0 5px; }
+  .empty { text-align: center; color: var(--text-tertiary); font-size: 14px; padding: 2rem 0; }
+  .top-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; }
+  .counter { font-size: 13px; color: var(--text-secondary); }
+  .clear-btn { font-size: 12px; color: var(--text-tertiary); cursor: pointer; background: none; border: none; font-family: var(--font); padding: 0; }
+  .clear-btn:hover { color: var(--text-danger); }
+  .status-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; min-height: 18px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.ok      { background: #1D9E75; }
+  .status-dot.saving  { background: #EF9F27; }
+  .status-dot.error   { background: #E24B4A; }
+  .status-dot.loading { background: #888780; animation: pulse 1s infinite; }
+  .status-txt { font-size: 12px; color: var(--text-tertiary); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border-light); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 0; gap: 12px; }
+  .loading-screen p { font-size: 14px; color: var(--text-tertiary); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-row">
+    <h1>Mis tareas</h1>
+    <span id="counter" class="counter"></span>
+  </div>
+
+  <div class="card">
+    <div class="form-grid">
+      <input type="text" id="taskInput" placeholder="Nueva tarea..." />
+      <select id="timeSelect">
+        <option value="1">Tiempo: Rápida</option>
+        <option value="2">Tiempo: Media</option>
+        <option value="3">Tiempo: Larga</option>
+      </select>
+      <select id="difSelect">
+        <option value="1">Dificultad: Fácil</option>
+        <option value="2" selected>Dificultad: Normal</option>
+        <option value="3">Dificultad: Difícil</option>
+        <option value="4">Dificultad: Muy difícil</option>
+      </select>
+      <select id="impSelect">
+        <option value="1">Importancia: Baja</option>
+        <option value="2" selected>Importancia: Normal</option>
+        <option value="3">Importancia: Alta</option>
+        <option value="4">Importancia: Crítica</option>
+      </select>
+      <input type="date" id="dateInput" title="Fecha límite (opcional)" />
+      <button class="add-btn" id="addBtn" onclick="addTask()">+ Agregar tarea</button>
+    </div>
+    <div class="status-bar">
+      <div class="status-dot loading" id="statusDot"></div>
+      <span class="status-txt" id="statusTxt">Conectando con Google Sheets...</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <span class="sort-lbl">Ordenar por:</span>
+    <button class="sort-btn on" onclick="setSort('score')" id="btn-score">Prioridad general</button>
+    <button class="sort-btn" onclick="setSort('fecha')" id="btn-fecha">Fecha límite</button>
+    <button class="sort-btn" onclick="setSort('importancia')" id="btn-importancia">Importancia</button>
+    <button class="sort-btn" onclick="setSort('tiempo')" id="btn-tiempo">Tiempo</button>
+    <button class="sort-btn" onclick="setSort('dificultad')" id="btn-dificultad">Dificultad</button>
+    <button class="clear-btn" onclick="clearDone()">Borrar completadas</button>
+  </div>
+
+  <div class="legend">
+    <div class="leg"><div class="dot" style="background:#E24B4A"></div>Urgente (&lt;3 días)</div>
+    <div class="leg"><div class="dot" style="background:#EF9F27"></div>Próxima (3–7 días)</div>
+    <div class="leg"><div class="dot" style="background:#1D9E75"></div>Con tiempo (&gt;7 días)</div>
+    <div class="leg"><div class="dot" style="background:#888780"></div>Sin fecha</div>
+  </div>
+
+  <div id="loadingScreen" class="loading-screen">
+    <div class="spinner"></div>
+    <p>Cargando tareas...</p>
+  </div>
+  <div class="task-list" id="taskList" style="display:none;"></div>
+  <div class="empty" id="emptyMsg" style="display:none;">No hay tareas aún. ¡Agrega una arriba!</div>
+</div>
+
+<script>
+// ============================================================
+//  REEMPLAZA ESTA URL con la que te dé Google Apps Script
+// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUqmhwJa2IHl7ZZcRj4rQ0lhlkgr8MJyX2g5VQN2ZHDys-E0oGlGRDG7ZYuDtIeO8E/exec';
+// ============================================================
+
+const TL = ['','Rápida','Media','Larga'];
+const DL = ['','Fácil','Normal','Difícil','Muy difícil'];
+const IL = ['','Baja','Normal','Alta','Crítica'];
+
+const todayDate = new Date(); todayDate.setHours(0,0,0,0);
+
+let tasks = [];
+let nextId = 1;
+let sortBy = 'score';
+let saving = false;
+
+function setStatus(state, msg) {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusTxt');
+  dot.className = 'status-dot ' + state;
+  txt.textContent = msg;
+}
+
+async function loadTasks() {
+  try {
+    setStatus('loading', 'Cargando tareas desde Google Sheets...');
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+    tasks  = data.tasks  || [];
+    nextId = data.nextId || 1;
+    setStatus('ok', 'Sincronizado con Google Sheets');
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('taskList').style.display = 'flex';
+    render();
+  } catch(e) {
+    setStatus('error', 'Error al conectar. Revisa que la URL de Apps Script sea correcta.');
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('taskList').style.display = 'flex';
+  }
+}
+
+async function saveTasks() {
+  if (saving) return;
+  saving = true;
+  setStatus('saving', 'Guardando...');
+  document.getElementById('addBtn').disabled = true;
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ tasks, nextId }),
+      headers: { 'Content-Type': 'text/plain' }
+    });
+    const now = new Date();
+    setStatus('ok', 'Guardado a las ' + now.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'}));
+  } catch(e) {
+    setStatus('error', 'Error al guardar. Verifica tu conexión a internet.');
+  }
+  saving = false;
+  document.getElementById('addBtn').disabled = false;
+}
+
+function daysUntil(ds) {
+  if (!ds) return null;
+  return Math.round((new Date(ds + 'T00:00:00') - todayDate) / 86400000);
+}
+function urgencyBonus(ds) {
+  const d = daysUntil(ds);
+  if (d === null) return 0;
+  if (d < 0)   return 20; if (d === 0) return 18;
+  if (d <= 2)  return 15; if (d <= 5)  return 10;
+  if (d <= 7)  return 6;  if (d <= 14) return 3;
+  if (d <= 30) return 1;  return 0;
+}
+function score(t)       { return Math.round(t.imp * 3 + t.dif * 1.5 + (4 - t.time) + urgencyBonus(t.date)); }
+function scoreColor(s)  { return s >= 22 ? '#E24B4A' : s >= 14 ? '#EF9F27' : s >= 7 ? '#1D9E75' : '#888780'; }
+function dateClass(ds)  { const d = daysUntil(ds); if(d===null)return'dx'; if(d<0)return'do'; if(d===0)return'dh'; if(d<=2)return'du'; if(d<=7)return'ds'; return'dn'; }
+function dateLabel(ds)  { const d = daysUntil(ds); if(d===null)return'Sin fecha'; if(d<0)return'Venció hace '+Math.abs(d)+'d'; if(d===0)return'Hoy'; if(d===1)return'Mañana'; return'En '+d+' días'; }
+function urgClass(ds)   { const d = daysUntil(ds); if(d===null)return''; if(d<=2)return'urgent'; if(d<=7)return'soon'; return''; }
+
+function setSort(key) {
+  sortBy = key;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('btn-' + key).classList.add('on');
+  render();
+}
+
+async function addTask() {
+  const inp  = document.getElementById('taskInput');
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); return; }
+  tasks.push({
+    id:   nextId++,
+    name,
+    time: +document.getElementById('timeSelect').value,
+    dif:  +document.getElementById('difSelect').value,
+    imp:  +document.getElementById('impSelect').value,
+    date: document.getElementById('dateInput').value || null,
+    done: false,
+  });
+  inp.value = '';
+  document.getElementById('dateInput').value = '';
+  render();
+  await saveTasks();
+}
+
+async function toggleDone(id) {
+  const t = tasks.find(x => x.id === id);
+  if (t) t.done = !t.done;
+  render();
+  await saveTasks();
+}
+
+async function deleteTask(id) {
+  if (!confirm('¿Eliminar esta tarea?')) return;
+  tasks = tasks.filter(x => x.id !== id);
+  render();
+  await saveTasks();
+}
+
+async function clearDone() {
+  const n = tasks.filter(t => t.done).length;
+  if (!n) { alert('No hay tareas completadas.'); return; }
+  if (!confirm('¿Eliminar ' + n + ' tarea(s) completada(s)?')) return;
+  tasks = tasks.filter(t => !t.done);
+  render();
+  await saveTasks();
+}
+
+function sortFn(key) {
+  if (key === 'score')       return t => -score(t);
+  if (key === 'importancia') return t => -t.imp;
+  if (key === 'tiempo')      return t => t.time;
+  if (key === 'dificultad')  return t => -t.dif;
+  if (key === 'fecha')       return t => { const d = daysUntil(t.date); return d === null ? 9999 : d; };
+  return t => -score(t);
+}
+
+function cardHTML(t) {
+  const s = score(t), col = scoreColor(s), uc = urgClass(t.date);
+  return '<div class="tc'+(t.done?' done':'')+(uc?' '+uc:'')+'">'+
+    '<div class="chk'+(t.done?' on':'')+'" onclick="toggleDone('+t.id+')">'+
+      '<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="#2d8a55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+    '</div>'+
+    '<div class="tinfo">'+
+      '<div class="tname">'+t.name+'</div>'+
+      '<div class="tmeta">'+
+        '<span class="badge bt'+t.time+'">'+TL[t.time]+'</span>'+
+        '<span class="badge bd'+t.dif+'">'+DL[t.dif]+'</span>'+
+        '<span class="badge bi'+t.imp+'">'+IL[t.imp]+'</span>'+
+        '<span class="badge '+dateClass(t.date)+'">'+dateLabel(t.date)+'</span>'+
+      '</div>'+
+    '</div>'+
+    '<div class="sblock"><span class="snum" style="color:'+col+'">'+s+'</span><span class="slbl">prioridad</span></div>'+
+    '<button class="del" onclick="deleteTask('+t.id+')">×</button>'+
+  '</div>';
+}
+
+function render() {
+  const fn      = sortFn(sortBy);
+  const pending = tasks.filter(t => !t.done).sort((a,b) => fn(a) - fn(b));
+  const done    = tasks.filter(t =>  t.done);
+  document.getElementById('counter').textContent = pending.length + ' pendientes · ' + done.length + ' completadas';
+  const list  = document.getElementById('taskList');
+  const empty = document.getElementById('emptyMsg');
+  if (tasks.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  let html = pending.map(cardHTML).join('');
+  if (done.length) html += '<div class="sec-lbl">Completadas</div>' + done.map(cardHTML).join('');
+  list.innerHTML = html;
+}
+
+document.getElementById('taskInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+loadTasks();
+</script>
+</body>
+</html>
