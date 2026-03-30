@@ -11,7 +11,7 @@
     --text-primary: #1a1a18; --text-secondary: #5f5e5a; --text-tertiary: #888780;
     --text-info: #185fa5; --text-danger: #a32d2d;
     --border-light: rgba(0,0,0,0.13); --border-mid: rgba(0,0,0,0.28);
-    --border-info: #378add; --border-success: #639922;
+    --border-info: #378add; --border-success: #639922; --border-danger: #e24b4a;
     --radius-md: 8px; --radius-lg: 12px; --font: system-ui, -apple-system, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
@@ -22,9 +22,55 @@
       --border-light: rgba(255,255,255,0.11); --border-mid: rgba(255,255,255,0.24);
     }
   }
-  body { font-family: var(--font); background: var(--bg-secondary); color: var(--text-primary); min-height: 100vh; padding: 2rem 1rem; }
+  body { font-family: var(--font); background: var(--bg-secondary); color: var(--text-primary); min-height: 100vh; }
+
+  /* ── LOGIN SCREEN ── */
+  #loginScreen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;
+  }
+  .login-box {
+    background: var(--bg-primary); border: 0.5px solid var(--border-light);
+    border-radius: var(--radius-lg); padding: 2rem; width: 100%; max-width: 360px;
+  }
+  .login-box h1 { font-size: 20px; font-weight: 500; margin-bottom: 0.25rem; }
+  .login-box p  { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.5rem; }
+  .tab-row { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border-light); }
+  .tab { font-size: 13px; padding: 8px 16px; cursor: pointer; color: var(--text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.12s; }
+  .tab.on { color: var(--text-info); border-bottom-color: var(--border-info); font-weight: 500; }
+  .login-form { display: flex; flex-direction: column; gap: 10px; }
+  .login-form label { font-size: 12px; color: var(--text-secondary); margin-bottom: 2px; display: block; }
+  .login-form input {
+    width: 100%; height: 38px; font-size: 14px; padding: 0 12px;
+    border-radius: var(--radius-md); border: 0.5px solid var(--border-mid);
+    background: var(--bg-primary); color: var(--text-primary); font-family: var(--font);
+  }
+  .login-form input:focus { outline: none; border-color: var(--border-info); }
+  .user-select {
+    width: 100%; height: 38px; font-size: 14px; padding: 0 10px;
+    border-radius: var(--radius-md); border: 0.5px solid var(--border-mid);
+    background: var(--bg-primary); color: var(--text-primary); font-family: var(--font); cursor: pointer;
+  }
+  .btn-primary {
+    width: 100%; height: 38px; border-radius: var(--radius-md); border: none;
+    background: #185fa5; color: #fff; font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: var(--font); transition: background 0.12s; margin-top: 4px;
+  }
+  .btn-primary:hover { background: #0c447c; }
+  .btn-primary:disabled { background: var(--border-mid); cursor: default; }
+  .login-error { font-size: 13px; color: var(--text-danger); padding: 8px 12px; background: #fcebeb; border-radius: var(--radius-md); display: none; }
+  .login-error.show { display: block; }
+  @media (prefers-color-scheme: dark) { .login-error { background: #501313; } }
+
+  /* ── APP SCREEN ── */
+  #appScreen { display: none; padding: 2rem 1rem; }
   .wrap { max-width: 700px; margin: 0 auto; }
-  h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; }
+  .top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; gap: 12px; }
+  .top-row h1 { font-size: 20px; font-weight: 500; }
+  .user-chip { display: flex; align-items: center; gap: 8px; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-info); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--text-info); flex-shrink: 0; }
+  .user-name { font-size: 13px; color: var(--text-secondary); }
+  .logout-btn { font-size: 12px; color: var(--text-tertiary); cursor: pointer; background: none; border: none; font-family: var(--font); padding: 0; }
+  .logout-btn:hover { color: var(--text-danger); }
   .card { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .form-grid input[type="text"], .form-grid input[type="date"], .form-grid select {
@@ -34,25 +80,25 @@
   }
   .form-grid input[type="text"] { grid-column: 1 / -1; font-size: 14px; }
   .form-grid input:focus, .form-grid select:focus { outline: none; border-color: var(--border-info); }
-  .add-btn { grid-column: 1 / -1; height: 36px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-primary); font-size: 14px; cursor: pointer; font-family: var(--font); transition: background 0.12s; }
+  .add-btn { grid-column: 1 / -1; height: 36px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-primary); font-size: 14px; cursor: pointer; font-family: var(--font); }
   .add-btn:hover { background: var(--bg-secondary); }
   .add-btn:disabled { opacity: 0.5; cursor: default; }
   .controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
   .sort-lbl { font-size: 13px; color: var(--text-secondary); margin-right: 2px; }
-  .sort-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); transition: all 0.12s; }
+  .sort-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: transparent; color: var(--text-secondary); cursor: pointer; font-family: var(--font); }
   .sort-btn.on { background: var(--bg-info); color: var(--text-info); border-color: var(--border-info); font-weight: 500; }
   .sort-btn:hover:not(.on) { background: var(--bg-secondary); }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1rem; }
   .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
   .dot { width: 9px; height: 9px; border-radius: 50%; }
   .task-list { display: flex; flex-direction: column; gap: 8px; }
-  .tc { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 11px 14px; display: flex; align-items: center; gap: 11px; transition: border-color 0.12s; }
+  .tc { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 11px 14px; display: flex; align-items: center; gap: 11px; }
   .tc:hover { border-color: var(--border-mid); }
   .tc.urgent { border-left: 3px solid #E24B4A; }
   .tc.soon   { border-left: 3px solid #EF9F27; }
   .tc.done   { opacity: 0.4; }
   .tc.done .tname { text-decoration: line-through; }
-  .chk { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border-mid); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+  .chk { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border-mid); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .chk.on { background: var(--bg-success); border-color: var(--border-success); }
   .chk svg { display: none; }
   .chk.on svg { display: block; }
@@ -77,123 +123,288 @@
   .del:hover { color: var(--text-danger); }
   .sec-lbl { font-size: 11px; color: var(--text-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin: 1rem 0 5px; }
   .empty { text-align: center; color: var(--text-tertiary); font-size: 14px; padding: 2rem 0; }
-  .top-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; }
+  .status-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; min-height: 18px; }
+  .sdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sdot.ok { background: #1D9E75; }
+  .sdot.saving { background: #EF9F27; }
+  .sdot.error { background: #E24B4A; }
+  .sdot.loading { background: #888780; animation: pulse 1s infinite; }
+  .stxt { font-size: 12px; color: var(--text-tertiary); }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border-light); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .counter { font-size: 13px; color: var(--text-secondary); }
   .clear-btn { font-size: 12px; color: var(--text-tertiary); cursor: pointer; background: none; border: none; font-family: var(--font); padding: 0; }
   .clear-btn:hover { color: var(--text-danger); }
-  .status-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; min-height: 18px; }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .status-dot.ok      { background: #1D9E75; }
-  .status-dot.saving  { background: #EF9F27; }
-  .status-dot.error   { background: #E24B4A; }
-  .status-dot.loading { background: #888780; animation: pulse 1s infinite; }
-  .status-txt { font-size: 12px; color: var(--text-tertiary); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border-light); border-top-color: var(--text-secondary); border-radius: 50%; animation: spin 0.7s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
   .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 0; gap: 12px; }
   .loading-screen p { font-size: 14px; color: var(--text-tertiary); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top-row">
-    <h1>Mis tareas</h1>
-    <span id="counter" class="counter"></span>
-  </div>
 
-  <div class="card">
-    <div class="form-grid">
-      <input type="text" id="taskInput" placeholder="Nueva tarea..." />
-      <select id="timeSelect">
-        <option value="1">Tiempo: Rápida</option>
-        <option value="2">Tiempo: Media</option>
-        <option value="3">Tiempo: Larga</option>
-      </select>
-      <select id="difSelect">
-        <option value="1">Dificultad: Fácil</option>
-        <option value="2" selected>Dificultad: Normal</option>
-        <option value="3">Dificultad: Difícil</option>
-        <option value="4">Dificultad: Muy difícil</option>
-      </select>
-      <select id="impSelect">
-        <option value="1">Importancia: Baja</option>
-        <option value="2" selected>Importancia: Normal</option>
-        <option value="3">Importancia: Alta</option>
-        <option value="4">Importancia: Crítica</option>
-      </select>
-      <input type="date" id="dateInput" title="Fecha límite (opcional)" />
-      <button class="add-btn" id="addBtn" onclick="addTask()">+ Agregar tarea</button>
+<!-- ══════════════ LOGIN SCREEN ══════════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>Mis Tareas</h1>
+    <p>Inicia sesión para ver tus tareas</p>
+
+    <div class="tab-row">
+      <div class="tab on" id="tabLogin" onclick="showTab('login')">Iniciar sesión</div>
+      <div class="tab" id="tabRegister" onclick="showTab('register')">Nuevo usuario</div>
     </div>
-    <div class="status-bar">
-      <div class="status-dot loading" id="statusDot"></div>
-      <span class="status-txt" id="statusTxt">Conectando con Google Sheets...</span>
+
+    <div id="panelLogin" class="login-form">
+      <div>
+        <label>Usuario</label>
+        <select class="user-select" id="loginUser"></select>
+      </div>
+      <div>
+        <label>Contraseña</label>
+        <input type="password" id="loginPass" placeholder="Tu contraseña" />
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button class="btn-primary" id="loginBtn" onclick="doLogin()">Entrar</button>
+    </div>
+
+    <div id="panelRegister" class="login-form" style="display:none;">
+      <div>
+        <label>Nombre de usuario</label>
+        <input type="text" id="regUser" placeholder="ej. juan" />
+      </div>
+      <div>
+        <label>Contraseña</label>
+        <input type="password" id="regPass" placeholder="Elige una contraseña" />
+      </div>
+      <div class="login-error" id="regError"></div>
+      <button class="btn-primary" id="regBtn" onclick="doRegister()">Crear cuenta</button>
     </div>
   </div>
+</div>
 
-  <div class="controls">
-    <span class="sort-lbl">Ordenar por:</span>
-    <button class="sort-btn on" onclick="setSort('score')" id="btn-score">Prioridad general</button>
-    <button class="sort-btn" onclick="setSort('fecha')" id="btn-fecha">Fecha límite</button>
-    <button class="sort-btn" onclick="setSort('importancia')" id="btn-importancia">Importancia</button>
-    <button class="sort-btn" onclick="setSort('tiempo')" id="btn-tiempo">Tiempo</button>
-    <button class="sort-btn" onclick="setSort('dificultad')" id="btn-dificultad">Dificultad</button>
-    <button class="clear-btn" onclick="clearDone()">Borrar completadas</button>
-  </div>
+<!-- ══════════════ APP SCREEN ══════════════ -->
+<div id="appScreen">
+  <div class="wrap">
 
-  <div class="legend">
-    <div class="leg"><div class="dot" style="background:#E24B4A"></div>Urgente (&lt;3 días)</div>
-    <div class="leg"><div class="dot" style="background:#EF9F27"></div>Próxima (3–7 días)</div>
-    <div class="leg"><div class="dot" style="background:#1D9E75"></div>Con tiempo (&gt;7 días)</div>
-    <div class="leg"><div class="dot" style="background:#888780"></div>Sin fecha</div>
-  </div>
+    <div class="top-row">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <h1>Mis tareas</h1>
+        <span id="counter" class="counter"></span>
+      </div>
+      <div class="user-chip">
+        <div class="avatar" id="userAvatar"></div>
+        <span class="user-name" id="userName"></span>
+        <button class="logout-btn" onclick="logout()">Salir</button>
+      </div>
+    </div>
 
-  <div id="loadingScreen" class="loading-screen">
-    <div class="spinner"></div>
-    <p>Cargando tareas...</p>
+    <div class="card">
+      <div class="form-grid">
+        <input type="text" id="taskInput" placeholder="Nueva tarea..." />
+        <select id="timeSelect">
+          <option value="1">Tiempo: Rápida</option>
+          <option value="2">Tiempo: Media</option>
+          <option value="3">Tiempo: Larga</option>
+        </select>
+        <select id="difSelect">
+          <option value="1">Dificultad: Fácil</option>
+          <option value="2" selected>Dificultad: Normal</option>
+          <option value="3">Dificultad: Difícil</option>
+          <option value="4">Dificultad: Muy difícil</option>
+        </select>
+        <select id="impSelect">
+          <option value="1">Importancia: Baja</option>
+          <option value="2" selected>Importancia: Normal</option>
+          <option value="3">Importancia: Alta</option>
+          <option value="4">Importancia: Crítica</option>
+        </select>
+        <input type="date" id="dateInput" />
+        <button class="add-btn" id="addBtn" onclick="addTask()">+ Agregar tarea</button>
+      </div>
+      <div class="status-bar">
+        <div class="sdot loading" id="statusDot"></div>
+        <span class="stxt" id="statusTxt">Cargando...</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <span class="sort-lbl">Ordenar por:</span>
+      <button class="sort-btn on" onclick="setSort('score')"      id="btn-score">Prioridad</button>
+      <button class="sort-btn"    onclick="setSort('fecha')"      id="btn-fecha">Fecha</button>
+      <button class="sort-btn"    onclick="setSort('importancia')" id="btn-importancia">Importancia</button>
+      <button class="sort-btn"    onclick="setSort('tiempo')"     id="btn-tiempo">Tiempo</button>
+      <button class="sort-btn"    onclick="setSort('dificultad')" id="btn-dificultad">Dificultad</button>
+      <button class="clear-btn"   onclick="clearDone()">Borrar completadas</button>
+    </div>
+
+    <div class="legend">
+      <div class="leg"><div class="dot" style="background:#E24B4A"></div>Urgente (&lt;3 días)</div>
+      <div class="leg"><div class="dot" style="background:#EF9F27"></div>Próxima (3–7 días)</div>
+      <div class="leg"><div class="dot" style="background:#1D9E75"></div>Con tiempo (&gt;7 días)</div>
+      <div class="leg"><div class="dot" style="background:#888780"></div>Sin fecha</div>
+    </div>
+
+    <div id="loadingScreen" class="loading-screen">
+      <div class="spinner"></div>
+      <p>Cargando tareas...</p>
+    </div>
+    <div class="task-list" id="taskList" style="display:none;flex-direction:column;gap:8px;"></div>
+    <div class="empty" id="emptyMsg" style="display:none;">No hay tareas aún. ¡Agrega una arriba!</div>
+
   </div>
-  <div class="task-list" id="taskList" style="display:none;"></div>
-  <div class="empty" id="emptyMsg" style="display:none;">No hay tareas aún. ¡Agrega una arriba!</div>
 </div>
 
 <script>
 // ============================================================
-//  REEMPLAZA ESTA URL con la que te dé Google Apps Script
+//  REEMPLAZA ESTA URL con la de tu Apps Script
 // ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUqmhwJa2IHl7ZZcRj4rQ0lhlkgr8MJyX2g5VQN2ZHDys-E0oGlGRDG7ZYuDtIeO8E/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzg8bSNGU92K34wFcahQM_TXaf1mPBy5BXtbQwmecl6RBs8GisM0mpOFU6I5nQwNcpS/exec';
 // ============================================================
 
 const TL = ['','Rápida','Media','Larga'];
 const DL = ['','Fácil','Normal','Difícil','Muy difícil'];
 const IL = ['','Baja','Normal','Alta','Crítica'];
-
 const todayDate = new Date(); todayDate.setHours(0,0,0,0);
 
-let tasks = [];
-let nextId = 1;
-let sortBy = 'score';
-let saving = false;
+let tasks = [], nextId = 1, sortBy = 'score', saving = false;
+let currentUser = null, currentPass = null;
 
-function setStatus(state, msg) {
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusTxt');
-  dot.className = 'status-dot ' + state;
-  txt.textContent = msg;
+// ── Session ──
+function loadSession() {
+  try {
+    const s = JSON.parse(sessionStorage.getItem('tareas_session'));
+    if (s && s.user && s.pass) { currentUser = s.user; currentPass = s.pass; }
+  } catch(e) {}
+}
+function saveSession() {
+  sessionStorage.setItem('tareas_session', JSON.stringify({ user: currentUser, pass: currentPass }));
+}
+function logout() {
+  currentUser = null; currentPass = null;
+  sessionStorage.removeItem('tareas_session');
+  tasks = []; nextId = 1;
+  document.getElementById('appScreen').style.display  = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  loadUserList();
 }
 
-async function loadTasks() {
+// ── Tab ──
+function showTab(tab) {
+  document.getElementById('panelLogin').style.display    = tab === 'login'    ? 'flex' : 'none';
+  document.getElementById('panelRegister').style.display = tab === 'register' ? 'flex' : 'none';
+  document.getElementById('tabLogin').classList.toggle('on',    tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('on', tab === 'register');
+  clearErrors();
+}
+function clearErrors() {
+  ['loginError','regError'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('show'); el.textContent = '';
+  });
+}
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+
+// ── Load user list for select ──
+async function loadUserList() {
   try {
-    setStatus('loading', 'Cargando tareas desde Google Sheets...');
-    const res = await fetch(SCRIPT_URL);
+    const res  = await fetch(SCRIPT_URL + '?action=getUsers');
+    const data = await res.json();
+    const sel  = document.getElementById('loginUser');
+    sel.innerHTML = '';
+    (data.users || []).forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u; opt.textContent = u;
+      sel.appendChild(opt);
+    });
+    if (!data.users || data.users.length === 0) {
+      const opt = document.createElement('option');
+      opt.value = ''; opt.textContent = 'No hay usuarios — crea uno';
+      sel.appendChild(opt);
+    }
+  } catch(e) {}
+}
+
+// ── Login ──
+async function doLogin() {
+  clearErrors();
+  const user = document.getElementById('loginUser').value;
+  const pass = document.getElementById('loginPass').value;
+  if (!user) { showError('loginError', 'Selecciona un usuario'); return; }
+  if (!pass) { showError('loginError', 'Ingresa tu contraseña'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  try {
+    const res  = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'login', user, pass }), headers:{'Content-Type':'text/plain'} });
+    const data = await res.json();
+    if (data.ok) {
+      currentUser = user; currentPass = pass;
+      saveSession();
+      enterApp();
+    } else {
+      showError('loginError', data.error || 'Contraseña incorrecta');
+    }
+  } catch(e) {
+    showError('loginError', 'Error de conexión');
+  }
+  btn.disabled = false; btn.textContent = 'Entrar';
+}
+
+// ── Register ──
+async function doRegister() {
+  clearErrors();
+  const user = document.getElementById('regUser').value.trim();
+  const pass = document.getElementById('regPass').value;
+  if (!user) { showError('regError', 'Escribe un nombre de usuario'); return; }
+  if (!pass) { showError('regError', 'Escribe una contraseña'); return; }
+  const btn = document.getElementById('regBtn');
+  btn.disabled = true; btn.textContent = 'Creando cuenta...';
+  try {
+    const res  = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'register', user, pass }), headers:{'Content-Type':'text/plain'} });
+    const data = await res.json();
+    if (data.ok) {
+      currentUser = user; currentPass = pass;
+      saveSession();
+      enterApp();
+    } else {
+      showError('regError', data.error || 'No se pudo crear la cuenta');
+    }
+  } catch(e) {
+    showError('regError', 'Error de conexión');
+  }
+  btn.disabled = false; btn.textContent = 'Crear cuenta';
+}
+
+// ── Enter app ──
+function enterApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display   = 'block';
+  document.getElementById('userAvatar').textContent = currentUser.slice(0,2).toUpperCase();
+  document.getElementById('userName').textContent   = currentUser;
+  loadTasks();
+}
+
+// ── Status ──
+function setStatus(state, msg) {
+  document.getElementById('statusDot').className = 'sdot ' + state;
+  document.getElementById('statusTxt').textContent = msg;
+}
+
+// ── Load / Save ──
+async function loadTasks() {
+  setStatus('loading', 'Cargando tareas...');
+  try {
+    const res  = await fetch(SCRIPT_URL + '?action=getTasks&user=' + encodeURIComponent(currentUser));
     const data = await res.json();
     tasks  = data.tasks  || [];
     nextId = data.nextId || 1;
-    setStatus('ok', 'Sincronizado con Google Sheets');
+    setStatus('ok', 'Sincronizado');
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('taskList').style.display = 'flex';
     render();
   } catch(e) {
-    setStatus('error', 'Error al conectar. Revisa que la URL de Apps Script sea correcta.');
+    setStatus('error', 'Error al cargar. Revisa tu conexión.');
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('taskList').style.display = 'flex';
   }
@@ -207,30 +418,27 @@ async function saveTasks() {
   try {
     await fetch(SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify({ tasks, nextId }),
+      body: JSON.stringify({ action:'saveTasks', user: currentUser, pass: currentPass, tasks, nextId }),
       headers: { 'Content-Type': 'text/plain' }
     });
     const now = new Date();
-    setStatus('ok', 'Guardado a las ' + now.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'}));
+    setStatus('ok', 'Guardado a las ' + now.toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'}));
   } catch(e) {
-    setStatus('error', 'Error al guardar. Verifica tu conexión a internet.');
+    setStatus('error', 'Error al guardar');
   }
   saving = false;
   document.getElementById('addBtn').disabled = false;
 }
 
+// ── Date helpers ──
 function parseDate(ds) {
   if (!ds) return null;
-  // already YYYY-MM-DD
-  if (/^\d{4}-\d{2}-\d{2}$/.test(ds)) return new Date(ds + 'T00:00:00');
-  // M/D/YYYY or MM/DD/YYYY (Google Sheets default)
-  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(ds)) {
-    const [m, d, y] = ds.split('/');
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(ds))) return new Date(ds + 'T00:00:00');
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(String(ds))) {
+    const [m,d,y] = String(ds).split('/');
     return new Date(y + '-' + m.padStart(2,'0') + '-' + d.padStart(2,'0') + 'T00:00:00');
   }
-  // fallback
-  const d = new Date(ds);
-  return isNaN(d) ? null : d;
+  const d = new Date(ds); return isNaN(d) ? null : d;
 }
 function daysUntil(ds) {
   if (!ds) return null;
@@ -240,18 +448,16 @@ function daysUntil(ds) {
 }
 function urgencyBonus(ds) {
   const d = daysUntil(ds);
-  if (d === null) return 0;
-  if (d < 0)   return 20; if (d === 0) return 18;
-  if (d <= 2)  return 15; if (d <= 5)  return 10;
-  if (d <= 7)  return 6;  if (d <= 14) return 3;
-  if (d <= 30) return 1;  return 0;
+  if (d===null)return 0; if(d<0)return 20; if(d===0)return 18;
+  if(d<=2)return 15; if(d<=5)return 10; if(d<=7)return 6; if(d<=14)return 3; if(d<=30)return 1; return 0;
 }
-function score(t)       { return Math.round(t.imp * 3 + t.dif * 1.5 + (4 - t.time) + urgencyBonus(t.date)); }
-function scoreColor(s)  { return s >= 22 ? '#E24B4A' : s >= 14 ? '#EF9F27' : s >= 7 ? '#1D9E75' : '#888780'; }
-function dateClass(ds)  { const d = daysUntil(ds); if(d===null)return'dx'; if(d<0)return'do'; if(d===0)return'dh'; if(d<=2)return'du'; if(d<=7)return'ds'; return'dn'; }
-function dateLabel(ds)  { const d = daysUntil(ds); if(d===null)return'Sin fecha'; if(d<0)return'Venció hace '+Math.abs(d)+'d'; if(d===0)return'Hoy'; if(d===1)return'Mañana'; return'En '+d+' días'; }
-function urgClass(ds)   { const d = daysUntil(ds); if(d===null)return''; if(d<=2)return'urgent'; if(d<=7)return'soon'; return''; }
+function score(t)      { return Math.round(t.imp*3 + t.dif*1.5 + (4-t.time) + urgencyBonus(t.date)); }
+function scoreColor(s) { return s>=22?'#E24B4A':s>=14?'#EF9F27':s>=7?'#1D9E75':'#888780'; }
+function dateClass(ds) { const d=daysUntil(ds); if(d===null)return'dx'; if(d<0)return'do'; if(d===0)return'dh'; if(d<=2)return'du'; if(d<=7)return'ds'; return'dn'; }
+function dateLabel(ds) { const d=daysUntil(ds); if(d===null)return'Sin fecha'; if(d<0)return'Venció hace '+Math.abs(d)+'d'; if(d===0)return'Hoy'; if(d===1)return'Mañana'; return'En '+d+' días'; }
+function urgClass(ds)  { const d=daysUntil(ds); if(d===null)return''; if(d<=2)return'urgent'; if(d<=7)return'soon'; return''; }
 
+// ── Sort ──
 function setSort(key) {
   sortBy = key;
   document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('on'));
@@ -259,93 +465,76 @@ function setSort(key) {
   render();
 }
 
+// ── CRUD ──
 async function addTask() {
   const inp  = document.getElementById('taskInput');
   const name = inp.value.trim();
   if (!name) { inp.focus(); return; }
-  tasks.push({
-    id:   nextId++,
-    name,
-    time: +document.getElementById('timeSelect').value,
-    dif:  +document.getElementById('difSelect').value,
-    imp:  +document.getElementById('impSelect').value,
-    date: document.getElementById('dateInput').value || null,
-    done: false,
-  });
-  inp.value = '';
-  document.getElementById('dateInput').value = '';
-  render();
-  await saveTasks();
+  tasks.push({ id:nextId++, name, time:+document.getElementById('timeSelect').value, dif:+document.getElementById('difSelect').value, imp:+document.getElementById('impSelect').value, date:document.getElementById('dateInput').value||null, done:false });
+  inp.value = ''; document.getElementById('dateInput').value = '';
+  render(); await saveTasks();
 }
-
 async function toggleDone(id) {
-  const t = tasks.find(x => x.id === id);
-  if (t) t.done = !t.done;
-  render();
-  await saveTasks();
+  const t = tasks.find(x=>x.id===id); if(t) t.done=!t.done;
+  render(); await saveTasks();
 }
-
 async function deleteTask(id) {
   if (!confirm('¿Eliminar esta tarea?')) return;
-  tasks = tasks.filter(x => x.id !== id);
-  render();
-  await saveTasks();
+  tasks = tasks.filter(x=>x.id!==id);
+  render(); await saveTasks();
 }
-
 async function clearDone() {
-  const n = tasks.filter(t => t.done).length;
+  const n = tasks.filter(t=>t.done).length;
   if (!n) { alert('No hay tareas completadas.'); return; }
-  if (!confirm('¿Eliminar ' + n + ' tarea(s) completada(s)?')) return;
-  tasks = tasks.filter(t => !t.done);
-  render();
-  await saveTasks();
+  if (!confirm('¿Eliminar '+n+' tarea(s) completada(s)?')) return;
+  tasks = tasks.filter(t=>!t.done);
+  render(); await saveTasks();
 }
 
 function sortFn(key) {
-  if (key === 'score')       return t => -score(t);
-  if (key === 'importancia') return t => -t.imp;
-  if (key === 'tiempo')      return t => t.time;
-  if (key === 'dificultad')  return t => -t.dif;
-  if (key === 'fecha')       return t => { const d = daysUntil(t.date); return d === null ? 9999 : d; };
-  return t => -score(t);
+  if(key==='score')       return t=>-score(t);
+  if(key==='importancia') return t=>-t.imp;
+  if(key==='tiempo')      return t=>t.time;
+  if(key==='dificultad')  return t=>-t.dif;
+  if(key==='fecha')       return t=>{ const d=daysUntil(t.date); return d===null?9999:d; };
+  return t=>-score(t);
 }
 
 function cardHTML(t) {
-  const s = score(t), col = scoreColor(s), uc = urgClass(t.date);
+  const s=score(t),col=scoreColor(s),uc=urgClass(t.date);
   return '<div class="tc'+(t.done?' done':'')+(uc?' '+uc:'')+'">'+
     '<div class="chk'+(t.done?' on':'')+'" onclick="toggleDone('+t.id+')">'+
-      '<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="#2d8a55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
-    '</div>'+
-    '<div class="tinfo">'+
-      '<div class="tname">'+t.name+'</div>'+
-      '<div class="tmeta">'+
-        '<span class="badge bt'+t.time+'">'+TL[t.time]+'</span>'+
-        '<span class="badge bd'+t.dif+'">'+DL[t.dif]+'</span>'+
-        '<span class="badge bi'+t.imp+'">'+IL[t.imp]+'</span>'+
-        '<span class="badge '+dateClass(t.date)+'">'+dateLabel(t.date)+'</span>'+
-      '</div>'+
-    '</div>'+
+      '<svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" fill="none" stroke="#2d8a55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+    '<div class="tinfo"><div class="tname">'+t.name+'</div>'+
+    '<div class="tmeta"><span class="badge bt'+t.time+'">'+TL[t.time]+'</span><span class="badge bd'+t.dif+'">'+DL[t.dif]+'</span><span class="badge bi'+t.imp+'">'+IL[t.imp]+'</span><span class="badge '+dateClass(t.date)+'">'+dateLabel(t.date)+'</span></div></div>'+
     '<div class="sblock"><span class="snum" style="color:'+col+'">'+s+'</span><span class="slbl">prioridad</span></div>'+
-    '<button class="del" onclick="deleteTask('+t.id+')">×</button>'+
-  '</div>';
+    '<button class="del" onclick="deleteTask('+t.id+')">×</button></div>';
 }
 
 function render() {
-  const fn      = sortFn(sortBy);
-  const pending = tasks.filter(t => !t.done).sort((a,b) => fn(a) - fn(b));
-  const done    = tasks.filter(t =>  t.done);
-  document.getElementById('counter').textContent = pending.length + ' pendientes · ' + done.length + ' completadas';
-  const list  = document.getElementById('taskList');
-  const empty = document.getElementById('emptyMsg');
-  if (tasks.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  let html = pending.map(cardHTML).join('');
-  if (done.length) html += '<div class="sec-lbl">Completadas</div>' + done.map(cardHTML).join('');
-  list.innerHTML = html;
+  const fn=sortFn(sortBy);
+  const pending=tasks.filter(t=>!t.done).sort((a,b)=>fn(a)-fn(b));
+  const done=tasks.filter(t=>t.done);
+  document.getElementById('counter').textContent=pending.length+' pendientes · '+done.length+' completadas';
+  const list=document.getElementById('taskList'),empty=document.getElementById('emptyMsg');
+  if(tasks.length===0){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  let html=pending.map(cardHTML).join('');
+  if(done.length) html+='<div class="sec-lbl">Completadas</div>'+done.map(cardHTML).join('');
+  list.innerHTML=html;
 }
 
-document.getElementById('taskInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
-loadTasks();
+// ── Init ──
+document.getElementById('taskInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addTask(); });
+document.getElementById('loginPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('regPass').addEventListener('keydown',   e=>{ if(e.key==='Enter') doRegister(); });
+
+loadSession();
+if (currentUser && currentPass) {
+  enterApp();
+} else {
+  loadUserList();
+}
 </script>
 </body>
 </html>
